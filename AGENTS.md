@@ -7,6 +7,7 @@
 | 路径 | 内容 |
 |------|------|
 | `opendesign/` | OpenDesign（开源 Claude Design 替代品，桌面设计应用）的安装与对接说明 |
+| `marktext/` | MarkText（开源 Markdown 编辑器/查看器，Typora 替代品）的安装说明 |
 | `github-proxy.md` | GitHub 访问加速方案（镜像克隆、release 下载、回滚方法） |
 
 ## 约定
