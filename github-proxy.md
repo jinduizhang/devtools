@@ -21,6 +21,23 @@ git pull                                       # 自动经镜像
 git push                                       # 自动直连
 ```
 
+### 踩坑：push 报 `could not read Username for 'https://gh-proxy.com'`
+
+全局 `insteadOf` 对 `push` 同样生效（pushInsteadOf 只在 remote URL 本身是镜像地址时才生效）。实测结论：
+
+- ❌ remote 是原始地址 `https://github.com/owner/repo.git` → push 被重写到镜像 → 镜像要求认证，失败
+- ❌ remote 是镜像地址 + 显式设置了 `remote.<name>.pushurl` → 显式 pushurl 不受 pushInsteadOf 重写 → push 仍走镜像，失败
+- ✅ **remote 设为镜像地址，且不设置 pushurl** → pushInsteadOf 自动把 push 转回直连
+
+所以克隆后要推送的仓库，把 remote 改成镜像形式（只改这一处）：
+
+```bash
+git remote set-url origin "https://gh-proxy.com/https://github.com/owner/repo.git"
+# 不要执行 git remote set-url --push origin ...
+```
+
+`git remote -v` 应显示：fetch 是镜像地址、push 是 `https://github.com/...`（说明规则生效）。
+
 验证重写是否生效（看 GET 路径是否带 gh-proxy 前缀）：
 
 ```bash
